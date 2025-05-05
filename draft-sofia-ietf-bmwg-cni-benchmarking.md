@@ -25,18 +25,44 @@ venue:
 
 author:
  -
-    fullname: "Rute C. Sofia"
-    organization: fortiss GmbH
-    email: "rs19104@gmail.com"
+   ins: R. C. Sofia
+   name: Rute C. Sofia
+   org: fortiss GmbH
+   street: Guerickestr. 25
+   city: Munich
+   code: 80805
+   country: Germany
+   email: rs19104@gmail.com
+  -
+   ins: T. Samizadeh
+   name: Tina Samizadeh
+   org: fortiss GmbH
+   street: Guerickestr. 25
+   city: Munich
+   code: 80805
+   country: Germany
+   email: samizadeh@fortiss.org
+  -
+   ins: xxx
+   name: xxx
+   org: xxx
+   street: xxx
+   city: xxx
+   code: xxx
+   country: xxx
+   email: email
+-
 
 normative:
+RFC2119:
 
 informative:
 
 
+
 --- abstract
 
-TODO Abstract
+This document provides an overview on approaches for Kubernetes CNI benchmarking within the context of Edge to Cloud deployments. The draft focuses on the performance of networking plugins used in container orchestration systems like Kubernetes, e.g., Multus, Calico, Cilium, Flannel, and explores an alignment towards software defined networking. The focus is on the proposal of formal methodologies that can support an adequate benchmarking of Kubernetes CNIs.
 
 
 --- middle
@@ -49,11 +75,77 @@ TODO Introduction
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 {{RFC2119}}.
+In this document, these words will appear with that interpretation   only when in ALL CAPS. Lower case uses of these words are not to be    interpreted as carrying significance described in RFC 2119.
 
+# Definitions
+
+* Latency (aka bounded latency), concerns the end-to-end transmission delay between a transmitter and a receiver, when a traffic flow is triggered by an application. By definition, latency corresponds to the time interval between sending the first packet of a flow from a source to a destination, until the instant of reception of the last packet of that flow.
+
+* Periodicity stands for whether or not the data transmission is executed in a periodic fashion and whenever possible, the specific periodicity per unit of time has been specified.
+
+* "Transmit data size” corresponds to the data payload in bytes.
+
+* “Time sync” refers to the need to ensure IEEE 1588 synchronization.
+
+* "Node density" provides (wherever available) a glimpse into the number of end-nodes per 20mx20m.
+
+
+# Fundamentals of CNI Benchmarking
+## Overview and Relevance in the Context of Telco-Cloud Environments
+
+## Container Network Interfaces in Kubernets
+
+## Relevancy of Kubernetes Networking in Telco-Cloud Environments
+
+## Overview of Main CNIs
+- Multus
+- calico
+- Cillium
+- Flannel
+-...
+
+## How K8s Relies in CNIs
+
+
+# CNI Benchmarking
+## Performance Metrics and Aspects
+### QoS
+### QoE
+### Deployment and Deletion Times
+### CPU and Memory
+...
+
+## Interoperability and Scability
+## Observability and Bottleneck Detection
+
+# CODECO Experimentation Framework Methodology
+## CODEF Overview and CNI Support
+## Environment Configuration Aspects
+## Measurement Tools
+
+
+...
+
+# Best Practices
+## Test Setup and Configuration for Telco-Cloud
+### Pod-to-Pod
+### Ingress and Egress Traffic
+### ...
+## Scalability, Fault Tolerance, Secure Connectivity Considerations
+## Integration Consideration
+## Result Generation
+### Standardised Output Formats
+### Reproducibility Guidelines
+### Comparative Analysis Guidelines
+# Challenges and Future Directions
+
+ 
 
 # Security Considerations
 
-TODO Security
+This document describes formal methodologies to support a solid, replicable and scalable analysis of Kubernetes CNIs for heterogeneous networking environments.
+TODO ...
 
 
 # IANA Considerations
@@ -65,5 +157,4 @@ This document has no IANA actions.
 
 # Acknowledgments
 {:numbered="false"}
-
-TODO acknowledge.
+The research leading to this draft has been developed in the context of the Horizon Europe project Cognitive Decentralised Edge Cloud Orchestration (CODECO). the CODECO project has received funding from the European Commission programme Horizon Europe, under grant agreement number: 101092696.
