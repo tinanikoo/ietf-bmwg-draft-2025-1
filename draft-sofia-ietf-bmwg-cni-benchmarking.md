@@ -25,8 +25,8 @@ venue:
 
 author:
  -
-    fullname: "Rute Sofia"
-    organization: Your Organization Here
+    fullname: "Rute C. Sofia"
+    organization: fortiss GmbH
     email: "rs19104@gmail.com"
 
 normative:
