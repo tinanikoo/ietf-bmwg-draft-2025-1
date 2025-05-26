@@ -24,15 +24,6 @@ venue:
   latest: "https://rute19104.github.io/ietf-bmwg-draft-2025-1/draft-sofia-ietf-bmwg-cni-benchmarking.html"
 
 author:
- -
-   ins: R. C. Sofia
-   name: Rute C. Sofia
-   org: fortiss GmbH
-   street: Guerickestr. 25
-   city: Munich
-   code: 80805
-   country: Germany
-   email: rs19104@gmail.com
   -
    ins: T. Samizadeh
    name: Tina Samizadeh
@@ -42,6 +33,15 @@ author:
    code: 80805
    country: Germany
    email: samizadeh@fortiss.org
+ -
+   ins: R. C. Sofia
+   name: Rute C. Sofia
+   org: fortiss GmbH
+   street: Guerickestr. 25
+   city: Munich
+   code: 80805
+   country: Germany
+   email: rs19104@gmail.com
   -
    ins: xxx
    name: xxx
