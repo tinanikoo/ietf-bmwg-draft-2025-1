@@ -446,7 +446,59 @@ Observability is critical in identifying performance bottlenecks that may arise 
 <section anchor="CODEF">
 <name>Best Practice Operational Example: CODEF</name>
 <t>
-CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
+CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor, as represented in Figure 1. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
+
+/t>
+
+  <figure>
+        <name>CODEF and its components.</name>
+       <artset>
+        <!-- This <artset> includes two <artwork> elements, each of a different type -->
+         <artwork type="ascii-art">
+<![CDATA[
+  +-------------------------------------------+
+  |  CODECO Experimentation Framework (CODEF) |
+  +-------------------------------------------+
+              |
+              v
+  +------------------------------------+     
+  |  Experiment and Cluster Definition |
+  +------------------------------------+                                          
+              |
+              v
+  +------------------------+
+  |   Experiment Manager   |
+  +------------------------+
+          |                   Container                Systems
+          | Deploy VMs+OS +---------------+     +-------------------+
+          +-------------> | Infrastr Mgrs |---> | physical,VM,cloud |
+          |               +---------------+     +-------------------+
+          | Deploy Resource Managers per node
+          |
+          |          Containers
+          |      +---------------+    +----------+
+          |----> | Resource MgrA |<-->|  Master  |      SW / App
+          |      +---------------+    +----------+    +---------+
+          |----> | Resource MgrB |<-->|  Worker1 |<-->| Ansible |
+          |      +---------------+    +----------+    +---------+
+          |----> | Resource MgrC |<-->|  WorkerX |
+          |      +---------------+    +----------+
+          |
+          |                   Container
+          | Execute Exper +----------------+    +------------+
+          +-------------> | Experiment Ctr |<-->| Iteration, |
+          |               +----------------+    | Metrics    |
+          |                                     +------------+
+          |                      Container      
+          | Output Results +-------------------+    +-------------+
+          +------------->  | Results Processor |<-->| Processing, |
+                           +-------------------+    | Stats, LaTeX|
+                                                    +-------------+
+]]>
+</artwork>
+
+        </artset>
+     </figure>
 <ul>
 <li>The Infrastructure Manager layer provisions cluster resources across heterogeneous environments, including bare-metal nodes, hypervisor-based virtual machines (e.g., VirtualBox, XCP-ng), and public or academic cloud testbeds (e.g., AWS, CloudLab, EdgeNet).</li>
 <li>The Resource Manager deploys software components on each node using parameterized Ansible playbooks. A dedicated instance of the Resource Manager operates per node to guarantee consistent, automated software setup.</li>
