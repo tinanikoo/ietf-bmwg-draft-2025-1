@@ -44,7 +44,7 @@
 -->
 
   <front>
-    <title abbrev="CNI Benchmarking"></title>
+    <title abbrev="CNI Telco-Cloud Benchmarking">CNI Telco-Cloud Benchmarking Considerations</title>
     <!--  [REPLACE/DELETE] abbrev. The abbreviated title is required if the full title is longer than 39 characters -->
 
     <seriesInfo name="Internet-Draft" value="draft-samizadeh-bmwg-cni-benchmarking-00"/>

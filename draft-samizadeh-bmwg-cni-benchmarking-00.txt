@@ -15,7 +15,7 @@ Expires: 8 January 2026                                        ATHENA RC
                                                              7 July 2025
 
 
-
+              CNI Telco-Cloud Benchmarking Considerations
                 draft-samizadeh-bmwg-cni-benchmarking-00
 
 Abstract
@@ -55,7 +55,7 @@ Status of This Memo
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 1]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
 Copyright Notice
@@ -111,7 +111,7 @@ Table of Contents
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 2]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
      11.2.  Informative References . . . . . . . . . . . . . . . . .  23
@@ -167,7 +167,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 3]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
       (CODECO)[codeco_d10] Experimentation Framework (CODEF) [codef].
@@ -223,7 +223,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 4]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
 3.1.  Scope of Metrics
@@ -279,7 +279,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 5]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    Flow setup rate (flows per second):
@@ -335,7 +335,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 6]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
 5.  Container Network Interfaces in Kubernetes
@@ -391,7 +391,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 7]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    *  Calico [calico]: Uses iptables or nftables as the default datapath
@@ -447,7 +447,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 8]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
 6.1.  Core Performance Metrics for CNI Benchmarking
@@ -503,7 +503,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                 [Page 9]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    For UDP, the benchmark SHOULD include UDP_RR testing, which captures
@@ -559,7 +559,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 10]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    *  Pod deletion time (s) SHOULD be measured to understand issues with
@@ -615,7 +615,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 11]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    benchmarking methodology SHOULD assess each CNI under at least three
@@ -671,7 +671,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 12]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    *  Deployment time, the time required to install or upgrade a CNI
@@ -727,7 +727,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 13]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    coordinate scalable and repeatable test scenarios.  Network
@@ -783,7 +783,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 14]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
      +-------------------------------------------+
@@ -839,7 +839,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 15]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    *  The Resource Manager deploys software components on each node
@@ -895,7 +895,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 16]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    abstracts infrastructure-specific details and enforces environmental
@@ -951,7 +951,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 17]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    scenarios and IoT scenarios, where embedded devices are a main part
@@ -1007,7 +1007,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 18]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    benchmarking guidance.  The practices focus on controlled environment
@@ -1063,7 +1063,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 19]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    Furthermore, adequate warm-up times when starting test runs, and
@@ -1119,7 +1119,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 20]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    *  CPU and memory usage per CNI pod/process via for instance
@@ -1175,7 +1175,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 21]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
@@ -1231,7 +1231,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 22]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    [RFC5481]  Morton, A. and B. Claise, "Packet Delay Variation
@@ -1287,7 +1287,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 23]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    [cilium]   Cillium Authors, "Cilium: eBPF-based Networking, Security,
@@ -1343,7 +1343,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 24]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
    [tc-netem] Linux Foundation, "tc-netem: Network Emulation", 2024,
@@ -1399,7 +1399,7 @@ Internet-Draft              CNI Benchmarking                   July 2025
 
 Samizadeh, et al.        Expires 8 January 2026                [Page 25]
 
-Internet-Draft              CNI Benchmarking                   July 2025
+Internet-Draft        CNI Telco-Cloud Benchmarking             July 2025
 
 
 Acknowledgements
