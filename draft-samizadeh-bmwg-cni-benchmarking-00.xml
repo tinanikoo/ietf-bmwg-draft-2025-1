@@ -532,6 +532,8 @@ Empirical results from experiments conducted with CODEF under a variety of scena
 Contrary to expectation, deploying lightweight CNI plugins on edge-optimized distributions does not always result in improved efficiency. In some cases, plugins reduce their resource footprint by sacrificing performance (e.g., selecting a simpler encapsulation mechanism), while others achieve better throughput when paired with more capable general-purpose distributions at the expense of increased overhead. These trade-offs SHOULD be explicitly captured in benchmarking outcomes.
 
 Importantly, the optimal CNI and distribution pairing is often workload-dependent. A configuration that appears suboptimal in terms of raw resource usage MAY outperform a lightweight alternative for certain traffic patterns, application behaviors, or network policies. As such, benchmarking methodologies intended for heterogeneous edge-cloud scenarios, in particular mobile scenarios and IoT scenarios, where embedded devices are a main part of the overall networking infrastructure, SHOULD incorporate these dimensions and evaluate plugin behavior across representative workloads and system conditions.
+
+The benchmarking network topology MUST operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network [8204].     
 </t>
 </section>
 
