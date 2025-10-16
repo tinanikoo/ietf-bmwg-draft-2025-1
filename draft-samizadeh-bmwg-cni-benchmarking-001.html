@@ -1349,8 +1349,15 @@ distributed infrastructures.<a href="#section-abstract-1" class="pilcrow">¶</a>
                 <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.&nbsp;&nbsp;<a href="#name-scope-of-metrics" class="internal xref">Scope of Metrics</a></p>
 </li>
             </ul>
+            
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.2" class="auto internal xref">3.2</a>.&nbsp;&nbsp;<a href="#name-Abbreviations" class="internal xref">Abbreviations</a></p>
 </li>
-
+            </ul>            
+            
+            
+</li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
             <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">4</a>.&nbsp;&nbsp;<a href="#name-container-network-interface" class="internal xref">Container Network Interfaces in Kubernetes</a></p>
 </li>
@@ -2058,7 +2065,8 @@ Kubernetes CNI topologies refers to patterns of network connectivity in a Kubern
  <li>3-Pod-to-Service communications</li>
  <li>4-External-to-Service communications</li>
     </ul>
-
+    The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network.
+<span>[<a href="#RFC8456" class="cite xref">RFC8456</a>]</span>
 
 <!-- <a href="#section-6.5-1" class="pilcrow"></a></p>-->
 </section>
@@ -2080,7 +2088,7 @@ streamline experimentation through abstraction, automation, and
 reproducibility. CODEF is logically divided into four functional layers,
  each implemented as an independent containerized microservice: 
 Infrastructure Manager, Resource Manager, Experiment Controller, and 
-Results' Processor, as represented in Figure 1. This modular design 
+Results' Processor, as represented in Figure 2. This modular design 
 ensures extensibility and facilitates integration with diverse 
 technologies across the experimentation pipeline.<a href="#section-7-1" class="pilcrow">¶</a></p>
 <span id="name-codef-and-its-components"></span><figure id="figure-1">
