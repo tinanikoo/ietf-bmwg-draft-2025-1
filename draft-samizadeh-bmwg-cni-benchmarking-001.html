@@ -2055,7 +2055,7 @@ these features.<a href="#section-6.5-1" class="pilcrow">¶</a></p>
 <div id="Kubernetes CNI topologies">
 <section id="section-6.6">
         <h3 id="name-Kubernetes-CNI-topologies">
-<a href="#section-6.5" class="section-number selfRef">5.5. </a><a href="#name-Kubernetes-CNI-topologies" class="section-name selfRef">Kubernetes CNI topologies</a>
+<a href="#section-6.5" class="section-number selfRef">5.6. </a><a href="#name-Kubernetes-CNI-topologies" class="section-name selfRef">Kubernetes CNI topologies</a>
         </h3>
 <p id="section-6.5-1">
 Kubernetes CNI topologies refers to patterns of network connectivity in a Kubernetes environment used for testing or benchmarking CNIs.
@@ -2072,13 +2072,126 @@ Kubernetes CNI topologies refers to patterns of network connectivity in a Kubern
 </section>
 </div>
 
+
+</section>
+</div>
+<div id="FEDErated">
+<section id="section-6">
+  <h2 id="name-cni-behavior-federated">
+    <a href="#section-6" class="section-number selfRef">6. </a>
+    <a href="#name-cni-behavior-federated" class="section-name selfRef">CNI Behavior in Federated and Multi-Cluster Environments</a>
+  </h2>
+
+  <p id="section-6-0">
+    While existing works such as <a href="https://datatracker.ietf.org/doc/html/rfc8172">[RFC8172]</a> and 
+    <a href="https://datatracker.ietf.org/doc/html/draft-ietf-bmwg-containerized-infra">[draft-ietf-bmwg-containerized-infra]</a> 
+    provide benchmarking methodologies for virtualized and containerized infrastructures, their scope does not extend to 
+    CNI behavior in multi-cluster or federated deployments. Architectural drafts like 
+    <a href="https://datatracker.ietf.org/doc/html/draft-dwon-t2trg-multiedge-arch">[draft-dwon-t2trg-multiedge-arch]</a>, 
+    <a href="https://datatracker.ietf.org/doc/html/draft-si-service-mesh-dta">[draft-si-service-mesh-dta]</a>, and 
+    <a href="https://datatracker.ietf.org/doc/html/draft-ietf-wimse-workload-identity-practices">[draft-ietf-wimse-workload-identity-practices]</a> 
+    discuss aspects of multi-cluster operations and security, but do not specify CNI-focused, measurable performance parameters and considerations. 
+    Similarly, <a href="https://datatracker.ietf.org/doc/html/draft-contreras-nmrg-interconnection-intents">[draft-contreras-nmrg-interconnection-intents]</a> 
+    introduces the notion of multi-cluster service deployment and intent-based interconnection, yet it does not cover 
+    CNI-level performance benchmarking across federated clusters.
+  </p>
+
+  <section id="section-6.1">
+    <h3 id="name-overview-federated-networking">
+      <a href="#section-6.1" class="section-number selfRef">6.1. </a>
+      <a href="#name-overview-federated-networking" class="section-name selfRef">Overview of Federated Networking</a>
+    </h3>
+
+    <p id="section-6.1-1">
+      Federated and multi-cluster environments extend the scope of container networking beyond single operational domains. 
+      These architectures enable scalability, geographical distribution, isolation, and service proximity to end users, 
+      which are key properties for multi-domain cloud-native infrastructures. 
+      Federated CNI benchmarking is particularly relevant to Telco-Cloud and 6G scenarios, where workloads are distributed 
+      between cloud and (far-)edge IoT domains, introducing additional considerations compared to single-cluster deployments.
+    </p>
+
+    <p id="section-6.1-2">
+      In such environments, multiple clusters operate as autonomous domains while being interconnected through federation layers 
+      or multi-cluster networking mechanisms. Examples include popular third-party solutions such as Submariner, Liqo, Karmada, 
+      and Open Cluster Management (OCM), which provide network connectivity, service discovery, and workload scheduling across clusters. 
+      In this context, CNIs are often extended by multi-cluster gateways or overlays to facilitate inter-cluster pod-to-pod and 
+      service-to-service communication. Such interconnections can rely on encapsulation protocols (e.g., VXLAN, IPSec, WireGuard) 
+      or Layer-7 service meshes (e.g., Istio, Linkerd, Consul, Open Service Mesh) – based on Envoy proxy and sidecars.
+    </p>
+  </section>
+
+
+<section id="section-6-2">
+  <h3 id="name-benchmarking-considerations-federated">
+    <a href="#section-6-2" class="section-number selfRef">6.2. </a>
+    <a href="#name-benchmarking-considerations-federated" class="section-name selfRef">
+      Benchmarking Considerations for CNIs in Federated Environments
+    </a>
+  </h3>
+
+  <p id="section-6-2-1">
+    Benchmarking CNIs in federated deployments MUST explicitly reflect how
+    (i) architectural choices, (ii) topology and connectivity, (iii) overlay and tunneling mechanisms,
+    (iv) synchronization, and (v) security enforcement affect network behavior for both
+    (i) data-plane and (ii) control-plane operations. The following factors are key:
+  </p>
+
+  <ul>
+    <li><strong>Federation and Topology Models:</strong>
+      CNIs may operate under hub-and-spoke (<a href="#RFC4364">RFC4364</a>, <a href="#RFC7024">RFC7024</a>),
+      neighboring, full-mesh (<a href="#RFC4271">RFC4271</a>, <a href="#RFC9181">RFC9181</a>)
+      or hierarchical (<a href="#RFC7426">RFC7426</a>) topologies.
+      Each model introduces distinct path lengths and potential bottlenecks and security concerns.
+      Benchmarks SHOULD quantify metrics like latency, jitter, and packet loss across these models.
+    </li>
+
+    <li><strong>Overlay, Encapsulation, and Encryption Mechanisms:</strong>
+      CNIs may rely on native multi-cluster extensions (e.g., Cilium ClusterMesh)
+      or external overlays (e.g., Submariner tunnels) with optional encryption
+      (e.g., IPSec, WireGuard). Tests SHOULD measure the combined encapsulation
+      and cryptographic overhead, including per-packet header size, MTU effects,
+      CPU utilization, and throughput reduction compared to unencrypted baselines.
+    </li>
+
+    <li><strong>Routing, Policy, and Synchronization Behavior:</strong>
+      CNIs synchronize endpoints, routes, and network policies across clusters.
+      Benchmarking SHOULD measure propagation delay, convergence time, and consistency
+      under dynamic conditions such as node joins, removals, or policy updates.
+      Resource utilization (CPU, memory, and bandwidth) during synchronization SHOULD also be recorded.
+    </li>
+
+    <li><strong>Cross-Cluster Connectivity and Load Balancing:</strong>
+      Evaluation SHOULD include one-way and RTT latency, throughput, and packet loss between pods located
+      in different clusters. When multi-cluster services distribute requests, benchmarks SHOULD assess
+      fairness as well as responsiveness to endpoint or cluster failures that influence path selection
+      and recovery behavior.
+    </li>
+
+    <li><strong>Quality of Service (QoS) and Policy Enforcement:</strong>
+      CNIs that implement QoS tagging or traffic shaping (e.g., Cilium’s eBPF/EDT-based pacing,
+      Calico’s DSCP marking and policy-driven shaping, Antrea’s TrafficControl, or Kube-OVN’s QoS queues)
+      SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays.
+      Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules)
+      remain consistent across domains.
+    </li>
+
+    <li><strong>Resiliency and Recovery Performance:</strong>
+      Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions,
+      including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration.
+      Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state.
+      Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption
+      duration to characterize the CNI’s overall fault-tolerance behavior.
+    </li>
+  </ul>
+</section>
+
 </section>
 </div>
 
 <div id="CODEF">
 <section id="section-7">
       <h2 id="name-best-practice-operational-e">
-<a href="#section-7" class="section-number selfRef">6. </a><a href="#name-best-practice-operational-e" class="section-name selfRef">Best Practice Operational Example: CODEF</a>
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-best-practice-operational-e" class="section-name selfRef">Best Practice Operational Example: CODEF</a>
       </h2>
 <p id="section-7-1">
 CODEF is an open-source, modular benchmarking environment that supports 
@@ -2177,7 +2290,7 @@ container network interfaces (CNIs) and infrastructure types.<a href="#section-7
 <div id="CODEF-Bench">
 <section id="section-7.1">
         <h3 id="name-codef-benchmarking-and-cni-">
-<a href="#section-7.1" class="section-number selfRef">6.1. </a><a href="#name-codef-benchmarking-and-cni-" class="section-name selfRef">CODEF Benchmarking and CNI Support</a>
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-codef-benchmarking-and-cni-" class="section-name selfRef">CODEF Benchmarking and CNI Support</a>
         </h3>
 <p id="section-7.1-1">CODEF addresses the need for repeatable, 
 infrastructure-agnostic benchmarking across the edge-to-cloud continuum.
@@ -2212,7 +2325,7 @@ meaningful, comparable, and reproducible results.<a href="#section-7.1-1" class=
 <div id="CODEF-Env">
 <section id="section-7.2">
         <h3 id="name-environment-configuration-a">
-<a href="#section-7.2" class="section-number selfRef">6.2. </a><a href="#name-environment-configuration-a" class="section-name selfRef">Environment Configuration Aspects</a>
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-environment-configuration-a" class="section-name selfRef">Environment Configuration Aspects</a>
         </h3>
 <p id="section-7.2-1">
 
@@ -2267,7 +2380,7 @@ behavior across representative workloads and system conditions.<a href="#section
 <div id="CODEF-measurement">
 <section id="section-7.3">
         <h3 id="name-measurement-tools">
-<a href="#section-7.3" class="section-number selfRef">6.3. </a><a href="#name-measurement-tools" class="section-name selfRef">Measurement Tools</a>
+<a href="#section-7.3" class="section-number selfRef">7.3. </a><a href="#name-measurement-tools" class="section-name selfRef">Measurement Tools</a>
         </h3>
 <p id="section-7.3-1">
 CODEF relies on Ansible playbooks to provision a suite of software tools
@@ -2308,7 +2421,7 @@ platform, particularly in virtualized or non-Intel environments.<a href="#sectio
 <div id="CNI-Methodology">
 <section id="section-8">
       <h2 id="name-kubernetes-cni-benchmarking">
-<a href="#section-8" class="section-number selfRef">7. </a><a href="#name-kubernetes-cni-benchmarking" class="section-name selfRef">Kubernetes CNI Benchmarking Telco-Cloud Methodology</a>
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-kubernetes-cni-benchmarking" class="section-name selfRef">Kubernetes CNI Benchmarking Telco-Cloud Methodology</a>
       </h2>
 <p id="section-8-1">
  This section defines a set of best practice guidelines for benchmarking
@@ -2333,14 +2446,13 @@ distributed, and microservice-oriented infrastructure environments.<a href="#sec
 <div id="CODEF-Test">
 <section id="section-8.1">
         <h3 id="name-controlled-test-environment">
-<a href="#section-8.1" class="section-number selfRef">7.1. </a><a href="#name-controlled-test-environment" class="section-name selfRef">Controlled Test Environments</a>
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-controlled-test-environment" class="section-name selfRef">Controlled Test Environments</a>
         </h3>
 <p id="section-8.1-1">
-Benchmarking SHOULD be conducted in isolated testbeds with no extraneous
- traffic or workloads. The following practices help reduce environmental
- noise and increase determinism:<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+Benchmarking SHOULD be conducted in isolated testbeds with no extraneous  traffic or workloads. The following practices help reduce environmental
+ noise and increase determinism:<a href="#section-8.1-1" class="pilcrow"></a></p>
 <ul class="normal">
-<li class="normal" id="section-8.1-2.1">Use bare-metal or dedicated VMs for benchmarking to avoid cross-tenant interference.<a href="#section-8.1-2.1" class="pilcrow">¶</a>
+<li class="normal" id="section-8.1-2.1">Use bare-metal or dedicated VMs for benchmarking to avoid cross-tenant interference.<a href="#section-8.1-2.1" class="pilcrow"></a>
 </li>
           <li class="normal" id="section-8.1-2.2">Ensure consistent CPU pinning and disable power-saving features or CPU frequency scaling to stabilize performance measurements.<a href="#section-8.1-2.2" class="pilcrow">¶</a>
 </li>
@@ -2352,7 +2464,7 @@ Benchmarking SHOULD be conducted in isolated testbeds with no extraneous
 <div id="CODEF-Test1">
 <section id="section-8.2">
         <h3 id="name-standardized-test-configura">
-<a href="#section-8.2" class="section-number selfRef">7.2. </a><a href="#name-standardized-test-configura" class="section-name selfRef">Standardized Test Configurations</a>
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-standardized-test-configura" class="section-name selfRef">Standardized Test Configurations</a>
         </h3>
 <p id="section-8.2-1">
 Benchmarking SHOULD adhere to pre-defined configurations to enable comparability across CNIs and platforms, aligning with <span>[<a href="#RFC2544" class="cite xref">RFC2544</a>]</span><span>[<a href="#RFC6815" class="cite xref">RFC6815</a>]</span>. The following elements MUST be documented:<a href="#section-8.2-1" class="pilcrow">¶</a></p>
@@ -2371,7 +2483,7 @@ Benchmarking SHOULD adhere to pre-defined configurations to enable comparability
 <div id="CODEF-repeatability">
 <section id="section-8.3">
         <h3 id="name-test-repeatability-and-stat">
-<a href="#section-8.3" class="section-number selfRef">7.3. </a><a href="#name-test-repeatability-and-stat" class="section-name selfRef">Test Repeatability and Statistical Significance</a>
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-test-repeatability-and-stat" class="section-name selfRef">Test Repeatability and Statistical Significance</a>
         </h3>
 <p id="section-8.3-1">
 Each experiment SHOULD be repeated a minimum of five times. For latency and throughput metrics, results MUST be reported using:<a href="#section-8.3-1" class="pilcrow">¶</a></p>
@@ -2382,17 +2494,14 @@ Each experiment SHOULD be repeated a minimum of five times. For latency and thro
 </li>
         </ul>
 <p id="section-8.3-3">
-Furthermore, adequate warm-up times when starting test runs, and 
-cool-down periods between test runs SHOULD be included to prevent 
-thermal bias or residual resource contention. Where possible, automation
- frameworks (e.g., CODEF, Ansible) SHOULD be used to ensure that each 
-experiment is launched from a clean state.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+Furthermore, adequate warm-up times when starting test runs, and cool-down periods between test runs SHOULD be included to prevent thermal bias or residual resource contention. Where possible, automation
+ frameworks (e.g., CODEF, Ansible) SHOULD be used to ensure that each experiment is launched from a clean state.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="CODEF-traffic">
 <section id="section-8.4">
         <h3 id="name-traffic-generators-traffic-">
-<a href="#section-8.4" class="section-number selfRef">7.4. </a><a href="#name-traffic-generators-traffic-" class="section-name selfRef">Traffic Generators, Traffic Models and Load Profiles</a>
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-traffic-generators-traffic-" class="section-name selfRef">Traffic Generators, Traffic Models and Load Profiles</a>
         </h3>
 <p id="section-8.4-1">
 Traffic generators MUST support multiple transport protocols (e.g., TCP,
@@ -2406,11 +2515,11 @@ RECOMMENDED. For realistic CNI evaluation:<a href="#section-8.4-1" class="pilcro
 </li>
         </ul>
 <p id="section-8.4-3">
-Benchmarks SHOULD include traffic profiles reflecting real-world microservice communications, such as:<a href="#section-8.4-3" class="pilcrow">¶</a></p>
+Benchmarks SHOULD include traffic profiles reflecting real-world microservice communications, such as:<a href="#section-8.4-3" class="pilcrow"></a></p>
 <ul class="normal">
 <li class="normal" id="section-8.4-4.1">Short-lived TCP connections (request/response.<a href="#section-8.4-4.1" class="pilcrow">¶</a>
 </li>
-          <li class="normal" id="section-8.4-4.2">Persistent streaming (large payloads, high throughput).<a href="#section-8.4-4.2" class="pilcrow">¶</a>
+          <li class="normal" id="section-8.4-4.2">Persistent streaming (large payloads, high throughput).<a href="#section-8.4-4.2" class="pilcrow"></a>
 </li>
           <li class="normal" id="section-8.4-4.3">Burst UDP traffic for latency and packet loss analysis.<a href="#section-8.4-4.3" class="pilcrow">¶</a>
 </li>
@@ -2420,7 +2529,7 @@ Benchmarks SHOULD include traffic profiles reflecting real-world microservice co
 <div id="CODEF-workload-sim">
 <section id="section-8.5">
         <h3 id="name-workload-simulation-emulati">
-<a href="#section-8.5" class="section-number selfRef">7.5. </a><a href="#name-workload-simulation-emulati" class="section-name selfRef">Workload Simulation, Emulation, and Stress Testing</a>
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-workload-simulation-emulati" class="section-name selfRef">Workload Simulation, Emulation, and Stress Testing</a>
         </h3>
 <p id="section-8.5-1">
 To evaluate performance under real-world loads, benchmarking MUST include scenarios with:<a href="#section-8.5-1" class="pilcrow"></a></p>
@@ -2437,10 +2546,14 @@ Tools such as kube-burner, chaos-mesh, and tc-netem are RECOMMENDED to
 orchestrate these scenarios, aligning with stress test guidance in <span>[<a href="#RFC8239" class="cite xref">RFC8239</a>]</span>.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
 </section>
 </div>
+
+
+
+
 <div id="CODEF-observability">
 <section id="section-8.6">
         <h3 id="name-observability-and-resource-">
-<a href="#section-8.6" class="section-number selfRef">7.6. </a><a href="#name-observability-and-resource-" class="section-name selfRef">Observability and Resource Instrumentation</a>
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-observability-and-resource-" class="section-name selfRef">Observability and Resource Instrumentation</a>
         </h3>
 <p id="section-8.6-1">
 CNIs SHOULD expose internal metrics (e.g., policy hits, flow counts, packet drops). Benchmarks MUST capture:<a href="#section-8.6-1" class="pilcrow"></a></p>
@@ -2455,13 +2568,25 @@ CNIs SHOULD expose internal metrics (e.g., policy hits, flow counts, packet drop
 <p id="section-8.6-3">
 Experimental and open-source examples on how such metrics can be 
 captured at a node and network level can be checked in the CODECO 
-project  <span>[<a href="#codeco_d10" class="cite xref">codeco_d10</a>]</span> and respective code <span>[<a href="#codeco_d12" class="cite xref">codeco_d12</a>]</span>. Resource metrics MUST be collected at both node-level and pod-level granularity.<a href="#section-8.6-3" class="pilcrow"></a></p>
+project  <span>[<a href="#codeco_d10" class="cite xref">codeco_d10</a>]</span> and respective code <span>[<a href="#codeco_d12" class="cite xref">codeco_d12</a>]</span>. Resource metrics MUST be collected at both node-level and pod-level granularity.
+
+  In federated or multi-cluster environments, observability becomes a distributed
+  operation spanning multiple control and data planes. Benchmarking MUST therefore
+  evaluate how CNIs and associated telemetry systems aggregate, synchronize, and
+  correlate metrics across clusters. This includes measuring propagation delays,
+  timestamp alignment, and aggregation accuracy when telemetry data flow through
+  federated collectors or monitoring backends (e.g., Prometheus-Thanos, Cortex).
+  Benchmarks SHOULD also assess the ability to localize inter-cluster bottlenecks
+  such as congested tunnels, gateway saturation, or asymmetric routing, distinguishing
+  local clusters from cross-cluster traffic degradation.
+
+<a href="#section-8.6-3" class="pilcrow"></a></p>
 </section>
 </div>
 <div id="CODEF-result">
 <section id="section-8.7">
         <h3 id="name-result-reporting-and-output">
-<a href="#section-8.7" class="section-number selfRef">7.7. </a><a href="#name-result-reporting-and-output" class="section-name selfRef">Result Reporting and Output Format</a>
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-result-reporting-and-output" class="section-name selfRef">Result Reporting and Output Format</a>
         </h3>
 <p id="section-8.7-1">
 Benchmarking outputs SHOULD:<a href="#section-8.7-1" class="pilcrow">¶</a></p>
@@ -2483,7 +2608,7 @@ analysis and long-term reproducibility, in line with goals in <span>[<a href="#R
 <div id="IANA">
 <section id="section-9">
       <h2 id="name-iana-considerations">
-<a href="#section-9" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
 <p id="section-9-1">This document has no IANA considerations.<a href="#section-9-1" class="pilcrow"></a></p>
 </section>
@@ -2491,7 +2616,7 @@ analysis and long-term reproducibility, in line with goals in <span>[<a href="#R
 <div id="security-considerations">
 <section id="section-10">
       <h2 id="name-security-considerations">
-<a href="#section-10" class="section-number selfRef">9. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
 <p id="section-10-1">
 Benchmarking tools and automation frameworks may introduce risk vectors 
@@ -2503,11 +2628,11 @@ expose sensitive cluster configuration or node-level details.<a href="#section-1
 </div>
 <section id="section-11">
       <h2 id="name-references">
-<a href="#section-11" class="section-number selfRef">10. </a><a href="#name-references" class="section-name selfRef">References</a>
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
 <section id="section-11.1">
         <h3 id="name-normative-references">
-<a href="#section-11.1" class="section-number selfRef">10.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
 <dt id="RFC2119">[RFC2119]</dt>
