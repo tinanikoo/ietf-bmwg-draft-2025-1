@@ -424,6 +424,7 @@ The use of orchestration tools such as Kube-Burner <xref target="kube-burner"/> 
 <name>Observability and Bottleneck Detection</name>
 <t>
 Observability is critical in identifying performance bottlenecks that may arise due to CNI behavior under stress conditions. Benchmarking SHOULD assess the ability of CNIs to expose metrics such as packet drops, queue lengths, or flow counts through standard telemetry interfaces (e.g., Prometheus, OpenTelemetry). Effective bottleneck detection tools and visibility into the data path are essential for root cause analysis. CNIs that provide native observability tooling (e.g., Cilium Hubble) SHOULD be benchmarked for the overhead and fidelity of these features.
+In federated or multi-cluster environments, observability becomes a distributed operation spanning multiple control and data planes. Benchmarking MUST therefore evaluate how CNIs and associated telemetry systems aggregate, synchronize, and correlate metrics across clusters. This includes measuring propagation delays, timestamp alignment, and aggregation accuracy when telemetry data flow through federated collectors/monitoring backends (e.g., Prometheus-Thanos, Cortex). Benchmarks SHOULD also assess the ability to localize inter-cluster bottlenecks such as congested tunnels, gateway saturation, or asymmetric routing, distinguishing local clusters from cross-cluster traffic degradation.
 </t>
 </section>
 
@@ -445,8 +446,33 @@ The benchmarking network topology must operate as an isolated test environment a
 
 </section>
 
-     
+<section anchor=cni_multi-cluster">
+<name>CNI Behavior in Federated and Multi-Cluster Environments</name>
+While existing works such as [RFC8172] and [draft-ietf-bmwg-containerized-infra] provide benchmarking methodologies for virtualized and containerized infrastructures, their scope does not extend to CNI behavior in multi-cluster or federated deployments. Architectural drafts like [draft-dwon-t2trg-multiedge-arch], [draft-si-service-mesh-dta], and [draft-ietf-wimse-workload-identity-practices] discuss aspects of multi-cluster operations and security, but do not specify CNI-focused, measurable performance parameters and considerations. Similarly, [draft-contreras-nmrg-interconnection-intents] introduces the notion of multi-cluster service deployment and intent-based interconnection, yet it does not cover CNI-level performance benchmarking across federated clusters.
 
+<section anchor="overview_of_federated">
+<name>Overview of Federated Networking</name>
+<t>
+Federated and multi-cluster environments extend the scope of container networking beyond single operational domains. These architectures enable scalability, geographical distribution, isolation, and service proximity to end users, which are key properties for multi-domain cloud-native infrastructures. Federated CNI benchmarking is particularly relevant to Telco-Cloud and 6G scenarios, where workloads are distributed between cloud and (far-)edge IoT domains, introducing additional considerations compared to single-cluster deployments.
+
+In such environments, multiple clusters operate as autonomous domains while being interconnected through federation layers or multi-cluster networking mechanisms. Examples include popular third-party solutions such as Submariner, Liqo, Karmada, and Open Cluster Management (OCM), which provide network connectivity, service discovery, and workload scheduling across clusters. In this context, CNIs are often extended by multi-cluster gateways or overlays to facilitate inter-cluster pod-to-pod and service-to-service communication. Such interconnections can rely on encapsulation protocols (e.g., VXLAN, IPSec, WireGuard) or Layer-7 service meshes (e.g., Istio, Linkerd, Consul, Open Service Mesh) – based on Envoy proxy and sidecars.
+</t>  
+</section>
+<section anchor="bench_federated">
+<name>Benchmarking Considerations for CNIs in Federated Environmentsg</name>
+<t>Benchmarking CNIs in federated deployments MUST explicitly reflect how (i) architectural choices, (ii) topology and connectivity, 
+     (iii) overlay and tunneling mechanisms, (iv) synchronization, and (v) security enforcement affect network behavior for both (i) data-plane and 
+     (ii) control-plane operations. The following factors are key:</t>
+<ul>
+<li><strong>Federation and Topology Models:</strong> CNIs may operate under hub-and-spoke (<a href="#RFC4364">RFC4364</a>, <a href="#RFC7024">RFC7024</a>), neighboring, full-mesh (<a href="#RFC4271">RFC4271</a>, <a href="#RFC9181">RFC9181</a>) or hierarchical (<a href="#RFC7426">RFC7426</a>) topologies. Each model introduces distinct path lengths and potential bottlenecks and security concerns. Benchmarks SHOULD quantify metrics like latency, jitter, and packet loss across these models.</li>
+<li><strong>Overlay, Encapsulation, and Encryption Mechanisms:</strong> CNIs may rely on native multi-cluster extensions (e.g., Cilium ClusterMesh) or external overlays (e.g., Submariner tunnels) with optional encryption (e.g., IPSec, WireGuard). Tests SHOULD measure the combined encapsulation and cryptographic overhead, including per-packet header size, MTU effects, CPU utilization, and throughput reduction compared to unencrypted baselines.</li>
+<li><strong>Routing, Policy, and Synchronization Behavior:</strong> CNIs synchronize endpoints, routes, and network policies across clusters. Benchmarking SHOULD measure propagation delay, convergence time, and consistency under dynamic conditions such as node joins, removals, or policy updates. Resource utilization (CPU, memory, and bandwidth) during synchronization SHOULD also be recorded.</li>
+<li><strong>Cross-Cluster Connectivity and Load Balancing:</strong> Evaluation SHOULD include one-way and RTT latency, throughput, and packet loss between pods located in different clusters. When multi-cluster services distribute requests, benchmarks SHOULD assess fairness as well as responsiveness to endpoint or cluster failures that influence path selection and recovery behavior.</li>
+<li><strong>Quality of Service (QoS) and Policy Enforcement:</strong> CNIs that implement QoS tagging or traffic shaping (e.g., Cilium’s eBPF/EDT-based pacing, Calico’s DSCP marking and policy-driven shaping, Antrea’s TrafficControl, or Kube-OVN’s QoS queues) SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays. Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules) remain consistent across domains.</li>
+<li><strong>Resiliency and Recovery Performance:</strong> Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions, including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration. Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state. Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption duration to characterize the CNI’s overall fault-tolerance behavior.</li>
+</ul>
+
+</section>
 </section>
 
 <section anchor="CODEF">
@@ -757,6 +783,7 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
             <!-- [CHECK] -->
           </front>
         </reference>
+           
         
        <reference anchor="codeco_d10" target="https://doi.org/10.5281/zenodo.12819444">
   <front>
@@ -1039,9 +1066,21 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
       <t>
       This work has been funded by The European Commission in the context of the Horizon Europe CODECO project under grant number 101092696, and by SGC, Grant agreement nr: M-0626, project SemComIIoT. 
       </t>
+            <t>We thank Minh-Ngoc Tran for his contributions towards alignment with the draft<xref target="ietf-bmwg-07"/> , and suggestions for the removal of the former section 4, which provided a CNI summary only.</t>
      
     </section>
-    
+      <section anchor="Appendix-A" numbered="false">
+      <name>Appendix A. Change Log</name>
+      <t>
+      -since-draft-samizadeh-bmwg-cni-benchmarking-00:
+     <li>Section 4 and 5 were removed.</li>
+     <li>Added details about CNI Behavior in Federated and Multi-Cluster Environments.</li>
+     <li>Added details about Observability and Bottleneck Detection in multi-cluster or federated environments.</li>
+     <li>Revised references to Kubernetes network model and IETF drafts.</li>
+     <li>Minor editorial updates and formatting corrections.</li>      
+      </t>
+     
+    </section>
     
  </back>
 </rfc>
