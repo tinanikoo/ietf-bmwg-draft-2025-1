@@ -212,52 +212,62 @@
       <!-- [CHECK] The 'Requirements Language' section is optional -->
 
 <section anchor="statement">
- <name>Problem Statement and Alignment with BMWG Goals</name>
-<t>
-BMWG proposes and debates methodologies and metrics to evaluate performance characteristics of networking devices and systems in a repeatable, vendor-neutral, and interoperable manner. While multiple Kubernetes CNI solutions exist and are critical to Kubernetes networking and as such, to improve the alignment for telco-cloud networking solutions, there is currently no standardized methodology for benchmarking their performance, resource utilization, or behavior under varying operational conditions. The absence of such standards leads to non-reproducible, vendor-specific results that are difficult to compare or rely on for deployment decisions in edge-cloud contexts. 
+  <name>Problem Statement and Alignment with BMWG Goals</name>
+  <t>
+    BMWG proposes and debates methodologies and metrics to evaluate performance characteristics of networking devices and systems in a repeatable, vendor-neutral, and interoperable manner. While multiple Kubernetes CNI solutions exist and are critical to Kubernetes networking—and by extension, to telco-cloud networking—there is currently no standardized methodology for benchmarking their performance, resource utilization, or behavior under varying operational conditions. The absence of such standards leads to non-reproducible, vendor-specific results that are difficult to compare or rely on for deployment decisions in edge-cloud contexts.
+  </t>
 
-This document aligns with BMWG goals by proposing benchmarking considerations for Kubernetes Container Network Interface (CNI) plugins that adhere to the following principles:</t>
+  <t>
+    This document aligns with BMWG goals by proposing benchmarking considerations for Kubernetes Container Network Interface (CNI) plugins that adhere to the following principles:
+  </t>
 
-<ul>
-  <li>Repeatability and Reproducibility: The draft emphasizes deterministic test environments by leveraging clean-slate container orchestration through automation frameworks such as the experimental open-source Cognitive Decentralised Edge Cloud (CODECO)<xref target="codeco_d10"/>  Experimentation Framework (CODEF) <xref target="codef"/>. Test cases are repeatable across deployments, and variability in underlying infrastructure (e.g., bare metal vs. virtualized environments) is explicitly documented to preserve reproducibility, following BMWG best practices <xref target="RFC2544"/><xref target="RFC7312"/>.</li>
-   <li>Vendor-Neutral Evaluation: The proposed approach includes a diverse set of CNIs from multiple vendors and open-source communities, avoiding platform-specific optimizations. CNIs are evaluated under the same environmental and workload conditions to provide fair comparisons, consistent with BMWG's commitment to vendor-agnostic test procedures.</li>
-   <li>Metrics-Based Assessment: The document adopts classical benchmarking metrics including latency, throughput, jitter, and resource consumption (CPU, memory), extending them with CNI-relevant attributes such as pod network initialization time and observability overhead. These metrics are aligned with performance evaluation goals outlined in <xref target="RFC1242"/><xref target="RFC2285"/>, and more recent benchmarking efforts for virtualized environments <xref target="RFC8172"/></li>
-   <li>Applicability to Emerging Architectures: the targeted environment includes Edge-to-Cloud deployments, which represent modern distributed systems architectures. While BMWG has historically focused solely on network appliances, this work extends those principles into the networking aspects of containerized and software-defined infrastructures, continuing the evolution of benchmarking methods to address dynamic, microservice-based platforms.</li>
-   <li>Traffic and Control Plane Separation: Following BMWG precedent (e.g., <xref target="RFC6808"/>), the methodology distinguishes between control-plane operations (e.g., pod deployment and CNI setup latency) and data-plane behavior (e.g., packet forwarding performance), allowing comprehensive benchmarking of CNIs across operational dimensions.</li>
-   <li>Scalability and Stress Testing: The methodology incorporates stress and scalability scenarios, consistent with goals in <xref target="ietf-bmwg-containerized-infra"/>, to uncover performance degradation points and assess operational resilience of CNIs under heavy load and fault conditions.</li>
-   <li>CNIs in Kubernetes follow the models described in the IETF draft (<xref target="RFC6808"/>).</li>
-     
-</ul>
-<t>
-This alignment ensures that future extensions of this document toward a formal benchmarking specification can be scoped within the BMWG charter and contribute to standardized practices for container network evaluation.
-</t>
+  <ul>
+    <li>Repeatability and Reproducibility: The draft emphasizes deterministic test environments by leveraging clean-slate container orchestration through automation frameworks such as the experimental open-source Cognitive Decentralised Edge Cloud (CODECO) <xref target="codeco_d10"/> and the Experimentation Framework (CODEF) <xref target="codef"/>. Test cases are repeatable across deployments, and variability in underlying infrastructure (e.g., bare metal vs. virtualized environments) is explicitly documented to preserve reproducibility, following BMWG best practices <xref target="RFC2544"/> and <xref target="RFC7312"/>.</li>
 
-<section anchor="abbreviations">
- <name>Abbreviations</name>
- <t>
- <ul>
-<li>CNI: Container Network Interface</li>
-<li>SUT: System Under Test</li>
-<li>DUT: Device Under Test</li>
-<li>SDN: Software Defined Networking</li>
-<li>OVS: Open vSwitch</li>
-<li>OVN: Open Virtual Network</li>
-<li>RTT: Round-Trip Time</li>
-<li>eBPF: Extended Berkeley Packet Filter</li>
-<li>ENI: Elastic Network Interface</li>
-<li>QoE: Quality of Experience</li>
-</ul>
- 
- </t>
+    <li>Vendor-Neutral Evaluation: The proposed approach includes a diverse set of CNIs from multiple vendors and open-source communities, avoiding platform-specific optimizations. CNIs are evaluated under the same environmental and workload conditions to provide fair comparisons, consistent with BMWG's commitment to vendor-agnostic test procedures.</li>
+
+    <li>Metrics-Based Assessment: The document adopts classical benchmarking metrics including latency, throughput, jitter, and resource consumption (CPU, memory), extending them with CNI-relevant attributes such as pod network initialization time and observability overhead. These metrics are aligned with performance evaluation goals outlined in <xref target="RFC1242"/>, <xref target="RFC2285"/>, and more recent benchmarking efforts for virtualized environments <xref target="RFC8172"/>.</li>
+
+    <li>Applicability to Emerging Architectures: The targeted environment includes Edge-to-Cloud deployments, which represent modern distributed system architectures. While BMWG has historically focused on network appliances, this work extends those principles to the networking aspects of containerized and software-defined infrastructures, continuing the evolution of benchmarking methods to address dynamic, microservice-based platforms.</li>
+
+    <li>Traffic and Control Plane Separation: Following BMWG precedent (e.g., <xref target="RFC6808"/>), the methodology distinguishes between control-plane operations (e.g., pod deployment and CNI setup latency) and data-plane behavior (e.g., packet forwarding performance), allowing comprehensive benchmarking of CNIs across operational dimensions.</li>
+
+    <li>Scalability and Stress Testing: The methodology incorporates stress and scalability scenarios, consistent with goals in <xref target="ietf-bmwg-07"/>, to uncover performance degradation points and assess operational resilience of CNIs under heavy load and fault conditions.</li>
+
+
+    <li>Model Reference: CNIs in Kubernetes follow the models described in <xref target="RFC6808"/>.</li>
+  </ul>
+
+  <t>
+    This alignment ensures that future extensions of this document toward a formal benchmarking specification can be scoped within the BMWG charter and contribute to standardized practices for container network evaluation.
+  </t>
+
+  <section anchor="abbreviations">
+    <name>Abbreviations</name>
+    
+      <ul>
+        <li>CNI: Container Network Interface</li>
+        <li>SUT: System Under Test</li>
+        <li>DUT: Device Under Test</li>
+        <li>SDN: Software Defined Networking</li>
+        <li>OVS: Open vSwitch</li>
+        <li>OVN: Open Virtual Network</li>
+        <li>RTT: Round-Trip Time</li>
+        <li>eBPF: Extended Berkeley Packet Filter</li>
+        <li>ENI: Elastic Network Interface</li>
+        <li>QoE: Quality of Experience</li>
+      </ul>
+    
+  </section>
+
+  <section anchor="metrics-scope">
+    <name>Scope of Metrics</name>
+    <t>
+      The core benchmarking metrics in this document—such as latency, throughput, jitter, packet loss, and pod lifecycle time—are aligned with BMWG practices. Additional metrics such as resource usage, energy efficiency, and operational ease are included to reflect real-world operator concerns but are considered informational and outside the core BMWG scope.
+    </t>
+  </section>
 </section>
-<section anchor="metrics-scope">
- <name>Scope of Metrics</name>
- <t>
- The core benchmarking metrics in this document such as latency, throughput, jitter, packet loss, and pod lifecycle time are aligned with BMWG practices. 
- 
- Additional metrics such as resource usage, energy efficiency, and operational ease are included to reflect real-world operator concerns but are considered informational and outside the core BMWG scope.</t>
-</section>
-</section>
+
 
  
 
@@ -318,7 +328,7 @@ While several performance-benchmarking suites are already available from CNI pro
 <t>
 Considering the architecture of microservice-based applications, microservices may interact with each other and external services. Having containerized applications and orchestration platforms like Kubernetes, there is a continuous need to address communication and networking as Kubernetes doesn't handle networking itself. Moreover, communication between containers is extremely important to meet QoS requirements of applications. To evaluate the performance of CNIs there are several metrics that should be taken into account including network throughput, end-to-end latency, pod setup and deletion times, CPU and Memory utilization, etc. 
 
-This section defines the core benchmarking metrics used to assess the performance of Container Network Interface (CNI) plugins in Kubernetes environments. The metrics conform to the standard benchmarking framework set forth in [RFC2544], [RFC1242], [RFC8172], and are extended where necessary to include container-specific control-plane considerations. Measurements MUST be conducted under controlled conditions as described in Section 8, and SHOULD include both steady-state and dynamic workloads.
+This section defines the core benchmarking metrics used to assess the performance of Container Network Interface (CNI) plugins in Kubernetes environments. The metrics conform to the standard benchmarking framework set forth in <xref target="RFC2544"/>, <xref target="RFC1242"/>, <xref target="RFC8172"/>, and are extended where necessary to include container-specific control-plane considerations. Measurements MUST be conducted under controlled conditions as described in Section 8, and SHOULD include both steady-state and dynamic workloads.
 </t>
 
 <section anchor="CNI-QoS-data-plane">
@@ -431,7 +441,7 @@ In federated or multi-cluster environments, observability becomes a distributed 
 <section anchor="kubernetes-cni-topologies">
 <name>Kubernetes CNI topologies</name>
 <t>
-Kubernetes CNI topologies refers to patterns of network connectivity in a Kubernetes environment used for testing or benchmarking CNIs <xref target="RFC8456"/> and <xref target="RFC8204"/> .
+Kubernetes CNI topologies refers to patterns of network connectivity in a Kubernetes environment used for testing or benchmarking CNIs <xref target="Kubernetes-docs"/>.
 </t>
 <ul>
 <li>Highly-coupled container-to-container communications</li>
@@ -441,15 +451,16 @@ Kubernetes CNI topologies refers to patterns of network connectivity in a Kubern
 </ul>
 
 <t>
-The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network <xref target="Kubernetes-docs"/> 
+The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network <xref target="RFC8456"/> and <xref target="RFC8204"/>.
 </t>
 
 </section>
-
+</section>
 <section anchor="cni_multi-cluster">
 <name>CNI Behavior in Federated and Multi-Cluster Environments</name>
-While existing works such as [RFC8172] and [draft-ietf-bmwg-containerized-infra] provide benchmarking methodologies for virtualized and containerized infrastructures, their scope does not extend to CNI behavior in multi-cluster or federated deployments. Architectural drafts like [draft-dwon-t2trg-multiedge-arch], [draft-si-service-mesh-dta], and [draft-ietf-wimse-workload-identity-practices] discuss aspects of multi-cluster operations and security, but do not specify CNI-focused, measurable performance parameters and considerations. Similarly, [draft-contreras-nmrg-interconnection-intents] introduces the notion of multi-cluster service deployment and intent-based interconnection, yet it does not cover CNI-level performance benchmarking across federated clusters.
-
+<t>
+While existing works such as <xref target="RFC8172"/>  and <xref target="ietf-bmwg-07"/> provide benchmarking methodologies for virtualized and containerized infrastructures, their scope does not extend to CNI behavior in multi-cluster or federated deployments. Architectural drafts like <xref target="draft-dwon-t2trg-multiedge-arch"/>, <xref target="draft-si-service-mesh-dta"/>, and <xref target="draft-ietf-wimse-workload-identity-practices"/> discuss aspects of multi-cluster operations and security, but do not specify CNI-focused, measurable performance parameters and considerations. Similarly, <xref target="draft-contreras-nmrg-interconnection-intents"/> introduces the notion of multi-cluster service deployment and intent-based interconnection, yet it does not cover CNI-level performance benchmarking across federated clusters.
+</t>
 <section anchor="overview_of_federated">
 <name>Overview of Federated Networking</name>
 <t>
@@ -464,13 +475,14 @@ In such environments, multiple clusters operate as autonomous domains while bein
      (iii) overlay and tunneling mechanisms, (iv) synchronization, and (v) security enforcement affect network behavior for both (i) data-plane and 
      (ii) control-plane operations. The following factors are key:</t>
 <ul>
-<li><strong>Federation and Topology Models:</strong> CNIs may operate under hub-and-spoke (<a href="#RFC4364">RFC4364</a>, <a href="#RFC7024">RFC7024</a>), neighboring, full-mesh (<a href="#RFC4271">RFC4271</a>, <a href="#RFC9181">RFC9181</a>) or hierarchical (<a href="#RFC7426">RFC7426</a>) topologies. Each model introduces distinct path lengths and potential bottlenecks and security concerns. Benchmarks SHOULD quantify metrics like latency, jitter, and packet loss across these models.</li>
-<li><strong>Overlay, Encapsulation, and Encryption Mechanisms:</strong> CNIs may rely on native multi-cluster extensions (e.g., Cilium ClusterMesh) or external overlays (e.g., Submariner tunnels) with optional encryption (e.g., IPSec, WireGuard). Tests SHOULD measure the combined encapsulation and cryptographic overhead, including per-packet header size, MTU effects, CPU utilization, and throughput reduction compared to unencrypted baselines.</li>
-<li><strong>Routing, Policy, and Synchronization Behavior:</strong> CNIs synchronize endpoints, routes, and network policies across clusters. Benchmarking SHOULD measure propagation delay, convergence time, and consistency under dynamic conditions such as node joins, removals, or policy updates. Resource utilization (CPU, memory, and bandwidth) during synchronization SHOULD also be recorded.</li>
-<li><strong>Cross-Cluster Connectivity and Load Balancing:</strong> Evaluation SHOULD include one-way and RTT latency, throughput, and packet loss between pods located in different clusters. When multi-cluster services distribute requests, benchmarks SHOULD assess fairness as well as responsiveness to endpoint or cluster failures that influence path selection and recovery behavior.</li>
-<li><strong>Quality of Service (QoS) and Policy Enforcement:</strong> CNIs that implement QoS tagging or traffic shaping (e.g., Cilium’s eBPF/EDT-based pacing, Calico’s DSCP marking and policy-driven shaping, Antrea’s TrafficControl, or Kube-OVN’s QoS queues) SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays. Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules) remain consistent across domains.</li>
-<li><strong>Resiliency and Recovery Performance:</strong> Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions, including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration. Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state. Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption duration to characterize the CNI’s overall fault-tolerance behavior.</li>
+<li>Federation and Topology Models: CNIs may operate under hub-and-spoke <xref target="RFC4364"/>, <xref target="RFC7024"/>, neighboring, full-mesh <xref target="RFC4271"/>, <xref target="RFC9181"/>, or hierarchical <xref target="RFC7426"/> topologies. Each model introduces distinct path lengths and potential bottlenecks and security concerns. Benchmarks SHOULD quantify metrics like latency, jitter, and packet loss across these models.</li>
+<li>Overlay, Encapsulation, and Encryption Mechanisms: CNIs may rely on native multi-cluster extensions (e.g., Cilium ClusterMesh) or external overlays (e.g., Submariner tunnels) with optional encryption (e.g., IPSec, WireGuard). Tests SHOULD measure the combined encapsulation and cryptographic overhead, including per-packet header size, MTU effects, CPU utilization, and throughput reduction compared to unencrypted baselines.</li>
+<li>Routing, Policy, and Synchronization Behavior: CNIs synchronize endpoints, routes, and network policies across clusters. Benchmarking SHOULD measure propagation delay, convergence time, and consistency under dynamic conditions such as node joins, removals, or policy updates. Resource utilization (CPU, memory, and bandwidth) during synchronization SHOULD also be recorded.</li>
+<li>Cross-Cluster Connectivity and Load Balancing: Evaluation SHOULD include one-way and RTT latency, throughput, and packet loss between pods located in different clusters. When multi-cluster services distribute requests, benchmarks SHOULD assess fairness as well as responsiveness to endpoint or cluster failures that influence path selection and recovery behavior.</li>
+<li>Quality of Service (QoS) and Policy Enforcement: CNIs that implement QoS tagging or traffic shaping (e.g., Cilium’s eBPF/EDT-based pacing, Calico’s DSCP marking and policy-driven shaping, Antrea’s TrafficControl, or Kube-OVN’s QoS queues) SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays. Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules) remain consistent across domains.</li>
+<li>Resiliency and Recovery Performance: Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions, including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration. Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state. Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption duration to characterize the CNI’s overall fault-tolerance behavior.</li>
 </ul>
+
 
 </section>
 </section>
@@ -478,7 +490,7 @@ In such environments, multiple clusters operate as autonomous domains while bein
 <section anchor="CODEF">
 <name>Best Practice Operational Example: CODEF</name>
 <t>
-CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor, as represented in Figure 1. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
+CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor, as represented in Figure 2. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
 
 
   <figure>
@@ -542,7 +554,7 @@ CODEF supports full automation of the experimentation lifecycle, from cluster in
 
 <section anchor="CODEF-Bench">
 <name>CODEF Benchmarking and CNI Support</name>
-<t>CODEF addresses the need for repeatable, infrastructure-agnostic benchmarking across the edge-to-cloud continuum. It supports a broad spectrum of third-party CNIs plugins, including Antrea, Calico, Cilium, Flannel, Weave Net, Kube-Router, Kube-OVN, and Multus, as well as emerging solutions such as L2S-M <xref target="L2S-M"/>. These CNIs can be deployed and benchmarked across multiple Kubernetes distributions, including upstream Kubernetes (vanilla), lightweight variants such as K3s, K0s, and MicroK8s, and production-grade clusters.
+<t>CODEF addresses the need for repeatable, infrastructure-agnostic benchmarking across the edge-to-cloud continuum. It supports a broad spectrum of third-party CNIs plugins, including Antrea  <xref target="antrea"/> , Calico  <xref target="calico"/>, Cilium <xref target="cilium"/>, Flannel <xref target="flannel"/>, Weave Net <xref target="weavenet"/>, Kube-Router <xref target="kube-router"/>, Kube-OVN <xref target="kube-ovn"/>, and Multus, as well as emerging solutions such as L2S-M <xref target="L2S-M"/>. These CNIs can be deployed and benchmarked across multiple Kubernetes distributions, including upstream Kubernetes (vanilla), lightweight variants such as K3s, K0s, and MicroK8s, and production-grade clusters.
 
 Each CNI plugin employs distinct architectural strategies at the network layer, such as underlay versus overlay models, use of encapsulation protocols (e.g., VXLAN, Geneve), encryption mechanisms (e.g., WireGuard, IPsec), and programmable datapaths (e.g., eBPF/XDP). Additionally, the degree of support for network policy enforcement, observability, and integration with Kubernetes-native APIs varies significantly across implementations. These differences introduce variability in performance, scalability, and resource utilization depending on workload and deployment characteristics.
 
@@ -735,6 +747,22 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5481.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9315.xml"/>
   
+  
+  
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4364.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8204.xml"/> 
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7024.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8456.xml"/> 
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9181.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7426.xml"/>
+        <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4271.xml"/>
+  
+  
+  
+  
+  
+ 
+  
         <!-- The recommended and simplest way to include a well known reference -->
         
       </references>
@@ -840,6 +868,18 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
   </front>
 </reference>
 
+
+<reference anchor="Kubernetes-docs" target="https://kubernetes.io/docs/concepts/cluster-administration/networking/">
+  <front>
+    <title>Kubernetes Documents-Cluster Networking</title>
+    <author>
+      <organization>Kubernetes Authors</organization>
+    </author>
+    <date year="2024"/>
+  </front>
+</reference>
+
+
 <reference anchor="flannel" target="https://github.com/flannel-io/flannel">
   <front>
     <title>Flannel CNI Plugin</title>
@@ -879,16 +919,6 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
     <date year="2024"/>
   </front>
 </reference>
-
-<reference anchor="K8s-netw-model" target="https://kubernetes.io/docs/concepts/cluster-administration/networking/">
-  <front>
-    <title>Kubernetes Networking Concepts, </title>
-    <author>
-      <organization>Kubernetes</organization>
-    </author>
-    <date year="2024"/>
-  </front>
- </reference>
 
 <reference anchor="cilium-bench" target="https://docs.cilium.io/en/latest/operations/performance/">
   <front>
@@ -1045,17 +1075,52 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
   <format type="HTML" target="https://datatracker.ietf.org/doc/draft-irtf-nmrg-energy-aware/04/"/>
 </reference>
 
-<reference anchor="I-D.ietf-bmwg-containerized-infra">
+
+
+
+
+<reference anchor="draft-dwon-t2trg-multiedge-arch" target="https://datatracker.ietf.org/doc/draft-dwon-t2trg-multiedge-arch/">
   <front>
-    <title>Considerations for Benchmarking Network Performance in Containerized Infrastructures</title>
-    <author initials="T." surname="Ngoc" fullname="Tuan-Anh Ngoc"/>
-    <author initials="M." surname="Boucadair" fullname="Mohamed Boucadair"/>
-    <author initials="R." surname="Srinivasan" fullname="Ranga Srinivasan"/>
-    <date month="May" year="2024"/>
+    <title>Multi-Edge Architecture for the Internet of Things (IoT). IETF draft draft-dwon-t2trg-multiedge-arch-02, Expired</title>
+    <author initials="J." surname="Dwon et al.">
+      <organization/>
+    </author>
+    <date year="2025"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-ietf-bmwg-containerized-infra-07"/>
-  <format type="HTML" target="https://datatracker.ietf.org/doc/draft-ietf-bmwg-containerized-infra/07/"/>
 </reference>
+
+<reference anchor="draft-si-service-mesh-dta" target="https://datatracker.ietf.org/doc/draft-si-service-mesh-dta/">
+  <front>
+    <title>Service Mesh-based Data Transfer Architecture. IETF draft draft-si-service-mesh-dta-01, Expired</title>
+    <author initials="Z." surname="Si et al.">
+      <organization/>
+    </author>
+    <date year="2025"/>
+  </front>
+</reference>
+
+<reference anchor="draft-ietf-wimse-workload-identity-practices" target="https://datatracker.ietf.org/doc/draft-ietf-wimse-workload-identity-practices/">
+  <front>
+    <title>Workload Identity Best Practices. IETF draft draft-ietf-wimse-workload-identity-practices-00, active</title>
+    <author initials="M." surname="Richardson et al.">
+      <organization/>
+    </author>
+    <date year="2025"/>
+  </front>
+</reference>
+
+<reference anchor="draft-contreras-nmrg-interconnection-intents" target="https://datatracker.ietf.org/doc/draft-contreras-nmrg-interconnection-intents/">
+  <front>
+    <title>Interconnection Intents for Network Services. IETF draft draft-contreras-nmrg-interconnection-intents-05, Expired</title>
+    <author initials="L." surname="Contreras et al.">
+      <organization/>
+    </author>
+    <date year="2025"/>
+  </front>
+</reference>
+
+
+
 
       </references>
     </references>
@@ -1071,14 +1136,16 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
     </section>
       <section anchor="Appendix-A" numbered="false">
       <name>Appendix A. Change Log</name>
-      <t>
-      -since-draft-samizadeh-bmwg-cni-benchmarking-00:
+     <t>
+     -Since draft-samizadeh-bmwg-cni-benchmarking-00:
+     </t>
+     <ul>
      <li>Section 4 and 5 were removed.</li>
      <li>Added details about CNI Behavior in Federated and Multi-Cluster Environments.</li>
      <li>Added details about Observability and Bottleneck Detection in multi-cluster or federated environments.</li>
      <li>Revised references to Kubernetes network model and IETF drafts.</li>
      <li>Minor editorial updates and formatting corrections.</li>      
-      </t>
+ </ul>
      
     </section>
     
