@@ -345,7 +345,7 @@ Performance Metrics for CNI Benchmarking
 <li>Pod-to-Service communications</li>
 <li>External-to-Service communications</li>
 </ul>
-<p>The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network. <span>[<a href="#RFC8456" class="cite xref">RFC8456</a>]</span></p>
+<p>The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network. <span>[<a href="#RFC8456" class="cite xref">RFC8456</a>]</span><span>[<a href="#RFC8204" class="cite xref">RFC8204</a>]</span></p>
 </section>
 </div>
 </section>
