@@ -26,7 +26,7 @@
 <rfc
   xmlns:xi="http://www.w3.org/2001/XInclude"
   category="info"
-  docName="draft-samizadeh-bmwg-cni-benchmarking-00"
+  docName="draft-samizadeh-bmwg-cni-benchmarking-01"
   ipr="trust200902"
   obsoletes=""
   updates=""
@@ -47,7 +47,7 @@
     <title abbrev="CNI Telco-Cloud Benchmarking">CNI Telco-Cloud Benchmarking Considerations</title>
     <!--  [REPLACE/DELETE] abbrev. The abbreviated title is required if the full title is longer than 39 characters -->
 
-    <seriesInfo name="Internet-Draft" value="draft-samizadeh-bmwg-cni-benchmarking-00"/>
+    <seriesInfo name="Internet-Draft" value="draft-samizadeh-bmwg-cni-benchmarking-01"/>
    
     <author fullname="Tina Samizadeh" initials="T." surname="Samizadeh">
       <!-- [CHECK]
@@ -167,7 +167,7 @@
      
 
    
-     <date day="07" month="July" year="2025" />
+     <date day="20" month="October" year="2025" />
     <!-- On draft subbmission:
          * If only the current year is specified, the current day and month will be used.
          * If the month and year are both specified and are the current ones, the current day will
@@ -224,13 +224,32 @@ This document aligns with BMWG goals by proposing benchmarking considerations fo
    <li>Metrics-Based Assessment: The document adopts classical benchmarking metrics including latency, throughput, jitter, and resource consumption (CPU, memory), extending them with CNI-relevant attributes such as pod network initialization time and observability overhead. These metrics are aligned with performance evaluation goals outlined in <xref target="RFC1242"/><xref target="RFC2285"/>, and more recent benchmarking efforts for virtualized environments <xref target="RFC8172"/></li>
    <li>Applicability to Emerging Architectures: the targeted environment includes Edge-to-Cloud deployments, which represent modern distributed systems architectures. While BMWG has historically focused solely on network appliances, this work extends those principles into the networking aspects of containerized and software-defined infrastructures, continuing the evolution of benchmarking methods to address dynamic, microservice-based platforms.</li>
    <li>Traffic and Control Plane Separation: Following BMWG precedent (e.g., <xref target="RFC6808"/>), the methodology distinguishes between control-plane operations (e.g., pod deployment and CNI setup latency) and data-plane behavior (e.g., packet forwarding performance), allowing comprehensive benchmarking of CNIs across operational dimensions.</li>
-   <li>Scalability and Stress Testing: The methodology incorporates stress and scalability scenarios, consistent with goals in <xref target="RFC8239"/>, to uncover performance degradation points and assess operational resilience of CNIs under heavy load and fault conditions.</li>
-
+   <li>Scalability and Stress Testing: The methodology incorporates stress and scalability scenarios, consistent with goals in <xref target="ietf-bmwg-containerized-infra"/>, to uncover performance degradation points and assess operational resilience of CNIs under heavy load and fault conditions.</li>
+   <li>CNIs in Kubernetes follow the models described in the IETF draft (<xref target="RFC6808"/>).</li>
+     
 </ul>
 <t>
 This alignment ensures that future extensions of this document toward a formal benchmarking specification can be scoped within the BMWG charter and contribute to standardized practices for container network evaluation.
 </t>
 
+<section anchor="abbreviations">
+ <name>Abbreviations</name>
+ <t>
+ <ul>
+<li>CNI: Container Network Interface</li>
+<li>SUT: System Under Test</li>
+<li>DUT: Device Under Test</li>
+<li>SDN: Software Defined Networking</li>
+<li>OVS: Open vSwitch</li>
+<li>OVN: Open Virtual Network</li>
+<li>RTT: Round-Trip Time</li>
+<li>eBPF: Extended Berkeley Packet Filter</li>
+<li>ENI: Elastic Network Interface</li>
+<li>QoE: Quality of Experience</li>
+</ul>
+ 
+ </t>
+</section>
 <section anchor="metrics-scope">
  <name>Scope of Metrics</name>
  <t>
@@ -240,93 +259,60 @@ This alignment ensures that future extensions of this document toward a formal b
 </section>
 </section>
 
-<section anchor="terminology">
-  <name>Benchmarking Terminology</name>
-  <t>
-This section defines core benchmarking terms used throughout the document, aligned with <xref target="RFC1242"/>, <xref target="RFC2544"/>, <xref target="RFC2285"/>, and with <xref target="I-D.ietf-bmwg-containerized-infra"/>. These terms form the basis for consistent measurement and reporting across Container Network Interface (CNI) benchmarking efforts. Each metric definition includes the unit of measurement and applicability to either data-plane or control-plane evaluation. Definitions specific to Kubernetes CNIs (e.g., pod lifecycle metrics) extend standard BMWG terminology to reflect control-plane behaviors in containerized environments. Such metrics MUST be validated for consistency with emerging benchmarking RFCs for cloud-native systems.
-
-A list of data plane metrics is as follows:</t>
-
-  <dl newline="true">
-        <!-- Omit newline="true" if you want each definition to start on the same line as the corresponding term -->
-        <dt>Latency (milliseconds, ms):</dt>
-        <dd> The time interval between the sending of the first bit of a packet from the source and the reception of the last bit at the destination <xref target="RFC1242"/>. </dd>
-        <dt>Round Trip Time (RTT), ms:</dt>
-        <dd>The time taken for a packet to traverse from source to destination and back again, typically used in TCP_RR and UDP_RR testing <xref target="RFC2544"/>.</dd>
-        <dt>Throughput (bps):</dt>
-        <dd>The average rate of successful data delivery over a communication channel, measured in bits per second (bps), as defined in <xref target="RFC2544"/>.</dd>
-        <dt>Packet loss rate (%):</dt>
-        <dd> The percentage of packets lost during transmission, typically due to congestion, buffer overflows, or link errors <xref target="RFC1242"/>.</dd>
-        <dt>Jitter (ms):</dt>
-        <dd> The variation in interarrival time between successive packets <xref target="RFC5481"/>.</dd>
-        <dt>Flow setup rate (flows per second):</dt>
-        <dd> The rate at which new flows or pod-level connections are successfully instantiated by the CNI. <xref target="RFC8172"/>.</dd>
-      </dl>
-      
-<t> 
-A list of control plane metrics is as follows:</t>
-<dl newline="true">
-        <!-- Omit newline="true" if you want each definition to start on the same line as the corresponding term -->
-        <dt>Pod Initialization Time (seconds, s):</dt>
-        <dd> The elapsed time between the submission of a pod specification and the point at which the pod is fully network-ready (CNI ADD completed).</dd>
-        <dt>Pod Deletion Time (s):</dt>
-        <dd> The time required for a pod to be gracefully terminated and its networking stack (CNI DEL) torn down.</dd>
-        <dt>CNI plugin deployment time (s):</dt>
-        <dd> The duration required to fully install or upgrade a CNI plugin across all nodes, including DaemonSet rollout.</dd>
-        <dt>CPU utilization:</dt>
-        <dd> The percentage of available processing capacity consumed by the CNI plugin under specified workload conditions <xref target="RFC8172"/>.</dd>
-        <dt>Memory utilization (MB):</dt>
-        <dd> The amount of system memory used by the CNI plugin during test execution. <xref target="RFC8172"/>.</dd>
-        <dt>CPU utilization:</dt>
-        <dd> The percentage of available processing capacity consumed by the CNI plugin under specified workload conditions <xref target="RFC8172"/>.</dd>
-         <dt>Flow setup rate (flows per second):</dt>
-        <dd> The rate at which new flows or pod-level connections are successfully instantiated by the CNI. <xref target="RFC8172"/>.</dd>
-         <dt>Policy enforcement delay (ms):</dt>
-        <dd> The time taken for a newly applied network policy to take effect across relevant pods and nodes.</dd>
-        <dt> Telemetry overhead:</dt>
-        <dd> The resource impact (CPU, memory, latency) introduced by telemetry or flow-tracking features such as Cilium Hubble or Calico logs.</dd>
-      </dl>
-      
-</section>
-    
-    
-<section anchor="CNI">
-<name>Container Network Interfaces in Kubernetes</name>
-<t>
-The CNI is a set of specifications and libraries that defines how container runtimes should configure network interfaces for containers and manage their connectivity. CNIs are essential components in Kubernetes to implement the Kubernetes network model <xref target="K8s-netw-model"/>, providing a standardized and container runtime agnostic way to configure network interfaces within containers and networks. In practice, they function as the intermediary layer that connects the Kubernetes control plane to a Kubernetes cluster/multi-cluster underlying network infrastructure. From a networking perspective, since a pod or container lacks network connectivity when first created, Kubernetes relies on a CNI plugin to:</t>
-<ul>
-<li>attach a virtual network interface (e.g., a veth) inside the container's namespace,</li>
-<li>link that interface to the host's networking stack,</li>
-<li>assign an IP address,</li>
-<li>set up network policies for isolation and</li>
-<li>install the appropriate routing information according to the cluster's IPAM strategy.</li>
-</ul>
-<t>
-CNIs enable seamless communication between micro-services (Kubernetes pods) in the cluster using pod IP addresses without NAT, with external networks and the outside world and can be categorized into four main categories based on their functional role and deployment scope:</t>
-<ul>
-<li>Standard Third-Party Plugins or Normal Non-Acceleration Networking Models <xref target="ietf-bmwg-07"/>: This category includes container networking solutions that rely on a single CNI plugin as the default network 
-  provider. These CNIs are typically installed via Kubernetes manifests (e.g., YAML files) and do not rely on external acceleration hardware. They implement pod-to-pod and pod-to-service networking within the Kubernetes cluster using standard Linux networking features, including iptables, nftables, eBPF, and tunneling mechanisms.</li>
-</ul>
-
-<ul>
-<li>Antrea <xref target="antrea"/>: Built on Open vSwitch (OVS), Antrea provides a feature-rich datapath with support for OpenFlow rules and Kubernetes-native policies. An optional eBPF datapath is also available to improve performance and enhance observability.</li>
-<li>Calico <xref target="calico"/>: Uses iptables or nftables as the default datapath and optionally supports an eBPF mode that can replace kube-proxy. It offers flexible policy enforcement, supports tunneling via VXLAN, IP-in-IP, WireGuard, and emphasizes scalability and performance.</li>
-<li>Cillium <xref target="cilium"/>: Implements a pure eBPF/XDP datapath that bypasses iptables entirely. It provides built-in L3-L7 observability (via the Hubble observability engine), native Kubernetes NetworkPolicy enforcement, identity-based security, and encryption support.</li>
-<li>Flannel <xref target="flannel"/>: A lightweight plugin that establishes an overlay network using VXLAN or host-gw modes. Flannel is often used with Calico in a hybrid setup (e.g., Canal) where Flannel provides basic connectivity and Calico handles policy enforcement.</li>
-<li>Kube-OVN <xref target="kube-ovn"/>: A cloud-native SDN built atop Open Virtual Network (OVN). Kube-OVN supports L2/L3 logical networking, IPv6/dual-stack, QoS policies, and Kubernetes CRDs for tenant isolation and IP management.</li>
-<li>Kube-Router <xref target="kube-router"/>: Integrates with the Linux kernel to provide routing via BGP, service proxying via IPVS, and network policy enforcement using iptables. It prioritizes simplicity and minimal resource overhead.</li>
-<li>Weave Net <xref target="weavenet"/>: Implements a peer-to-peer mesh overlay with automatic node discovery and encrypted communications. Designed for multi-cloud and edge scenarios, Weave Net was archived in June 2024 but remains referenced in historical deployments.</li>
-</ul>
-<t>
-These design choices SHOULD be considered in CNI performance benchmarking across varied workloads and deployment scenarios, while they SHOULD be evaluated within the context of the full containerized infrastructure to reflect real-world behavior.</t>
-</section>
+ 
 
 <section anchor="CNI-BenchP">
 <name>CNI Benchmarking Key Aspects</name>
 <t>
 While several performance-benchmarking suites are already available from CNI providers <xref target="cilium-bench"/>, the open-source community <xref target="TNSM21-cni"/>, and also in the IETF BMWG <xref target="ietf-bmwg-07"/>, a comprehensive CNI evaluation SHOULD incorporate relevant performance metrics, scalability aspects and identify bottlenecks. This section provides a view on relevant aspects to ensure reliable and replicable performance evaluation, considering aspects that are relevant from a telco-cloud perspective.
 </t>
- 
+<figure>
+        <name>Performance Metrics for CNI Benchmarking.</name>
+       <artset>
+        <!-- This <artset> includes two <artwork> elements, each of a different type -->
+         <artwork type="ascii-art">
+<![CDATA[
+ Performance Metrics for CNI Benchmarking
+│
+├── Core Performance Metrics 
+│    ├──  Control Plane Metrics 
+│    │       │ 	
+│    │       ├──  Pod Initialization Time (seconds, s)
+│    │       ├──  Pod Deletion Time (s)
+│    │       └──  CNI plugin deployment time (s)
+│    ├──  Data Plane Metrics
+│    │       │ 	
+│    │       ├──  TCP_RR (Request/Response)
+│    │       ├──  TCP_CRR (Connect/Request/Response)
+│    │       ├──  One-Way Latency (ms) [RFC1242] 
+│    │       ├──  RTT (ms) [RFC2544]
+│    │       ├──  Throughput (Mbps or Gbps) [RFC2544]
+│    │       ├──  Packet loss rate (%)  [RFC2544] 
+│    │       ├──  Jitter [RFC5481]
+│    │       ├──  Packet size variability [RFC2544]
+│    │       ├──  Concurrent flow handling  [RFC2285]
+│    │       └──  Flow setup rate (flows per second)  [RFC8172]
+│    └──  System Resource Performance Metrics
+│            │ 	
+│            ├──  CPU/GPU Utilization  [RFC8172]
+│            └──  Memory Utilization (MB/GB) [RFC8172]
+├── Extended Performance Metrics (Optional)
+│            │ 	
+│            ├──  Policy Enforcement Delay (ms)
+│            ├──  Telemetry Overhead
+│            └──  Power and Energy Consumption (J per bit)
+└──  Extended Quality of Experience for DevOps and Developers (Optional)
+             │ 	
+             ├──  Deployment time
+             ├──  Configuration simplicity
+             └──  Troubleshooting tooling
+
+]]>
+</artwork>
+
+</artset>
+</figure>
+     
 <section anchor="CNI-Performance">
 <name>Core Performance Metrics for CNI Benchmarking </name>
 <t>
@@ -440,6 +426,26 @@ The use of orchestration tools such as Kube-Burner <xref target="kube-burner"/> 
 Observability is critical in identifying performance bottlenecks that may arise due to CNI behavior under stress conditions. Benchmarking SHOULD assess the ability of CNIs to expose metrics such as packet drops, queue lengths, or flow counts through standard telemetry interfaces (e.g., Prometheus, OpenTelemetry). Effective bottleneck detection tools and visibility into the data path are essential for root cause analysis. CNIs that provide native observability tooling (e.g., Cilium Hubble) SHOULD be benchmarked for the overhead and fidelity of these features.
 </t>
 </section>
+
+<section anchor="kubernetes-cni-topologies">
+<name>Kubernetes CNI topologies</name>
+<t>
+Kubernetes CNI topologies refers to patterns of network connectivity in a Kubernetes environment used for testing or benchmarking CNIs <xref target="RFC8456"/> and <xref target="RFC8204"/> .
+</t>
+<ul>
+<li>Highly-coupled container-to-container communications</li>
+<li>Pod-to-Pod communications</li>
+<li>Pod-to-Service communications</li>
+<li>External-to-Service communications</li>
+</ul>
+
+<t>
+The benchmarking network topology must operate as an isolated test environment and MUST NOT connect to any devices that could forward test traffic into a production network or incorrectly route it to the test management network <xref target="Kubernetes-docs"/> 
+</t>
+
+</section>
+
+     
 
 </section>
 
