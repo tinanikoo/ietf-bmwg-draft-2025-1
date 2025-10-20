@@ -446,7 +446,7 @@ The benchmarking network topology must operate as an isolated test environment a
 
 </section>
 
-<section anchor=cni_multi-cluster">
+<section anchor="cni_multi-cluster">
 <name>CNI Behavior in Federated and Multi-Cluster Environments</name>
 While existing works such as [RFC8172] and [draft-ietf-bmwg-containerized-infra] provide benchmarking methodologies for virtualized and containerized infrastructures, their scope does not extend to CNI behavior in multi-cluster or federated deployments. Architectural drafts like [draft-dwon-t2trg-multiedge-arch], [draft-si-service-mesh-dta], and [draft-ietf-wimse-workload-identity-practices] discuss aspects of multi-cluster operations and security, but do not specify CNI-focused, measurable performance parameters and considerations. Similarly, [draft-contreras-nmrg-interconnection-intents] introduces the notion of multi-cluster service deployment and intent-based interconnection, yet it does not cover CNI-level performance benchmarking across federated clusters.
 
