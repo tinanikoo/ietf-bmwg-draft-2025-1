@@ -163,8 +163,7 @@
         <uri></uri>
       </address>
     </author>
-
-     
+   
 
    
      <date day="20" month="October" year="2025" />
@@ -214,7 +213,7 @@
 <section anchor="statement">
   <name>Problem Statement and Alignment with BMWG Goals</name>
   <t>
-    BMWG proposes and debates methodologies and metrics to evaluate performance characteristics of networking devices and systems in a repeatable, vendor-neutral, and interoperable manner. While multiple Kubernetes CNI solutions exist and are critical to Kubernetes networking—and by extension, to telco-cloud networking—there is currently no standardized methodology for benchmarking their performance, resource utilization, or behavior under varying operational conditions. The absence of such standards leads to non-reproducible, vendor-specific results that are difficult to compare or rely on for deployment decisions in edge-cloud contexts.
+    BMWG proposes and debates methodologies and metrics to evaluate performance characteristics of networking devices and systems in a repeatable, vendor-neutral, and interoperable manner. While multiple Kubernetes CNI solutions exist and are critical to Kubernetes networking-and by extension, to telco-cloud networking-there is currently no standardized methodology for benchmarking their performance, resource utilization, or behavior under varying operational conditions. The absence of such standards leads to non-reproducible, vendor-specific results that are difficult to compare or rely on for deployment decisions in edge-cloud contexts.
   </t>
 
   <t>
@@ -263,7 +262,7 @@
   <section anchor="metrics-scope">
     <name>Scope of Metrics</name>
     <t>
-      The core benchmarking metrics in this document—such as latency, throughput, jitter, packet loss, and pod lifecycle time—are aligned with BMWG practices. Additional metrics such as resource usage, energy efficiency, and operational ease are included to reflect real-world operator concerns but are considered informational and outside the core BMWG scope.
+      The core benchmarking metrics in this document, such as latency, throughput, jitter, packet loss, and pod lifecycle time, are aligned with BMWG practices. Additional metrics such as resource usage, energy efficiency, and operational ease are included to reflect real-world operator concerns but are considered informational and outside the core BMWG scope.
     </t>
   </section>
 </section>
@@ -276,52 +275,7 @@
 <t>
 While several performance-benchmarking suites are already available from CNI providers <xref target="cilium-bench"/>, the open-source community <xref target="TNSM21-cni"/>, and also in the IETF BMWG <xref target="ietf-bmwg-07"/>, a comprehensive CNI evaluation SHOULD incorporate relevant performance metrics, scalability aspects and identify bottlenecks. This section provides a view on relevant aspects to ensure reliable and replicable performance evaluation, considering aspects that are relevant from a telco-cloud perspective.
 </t>
-<figure>
-        <name>Performance Metrics for CNI Benchmarking.</name>
-       <artset>
-        <!-- This <artset> includes two <artwork> elements, each of a different type -->
-         <artwork type="ascii-art">
-<![CDATA[
- Performance Metrics for CNI Benchmarking
-│
-├── Core Performance Metrics 
-│    ├──  Control Plane Metrics 
-│    │       │ 	
-│    │       ├──  Pod Initialization Time (seconds, s)
-│    │       ├──  Pod Deletion Time (s)
-│    │       └──  CNI plugin deployment time (s)
-│    ├──  Data Plane Metrics
-│    │       │ 	
-│    │       ├──  TCP_RR (Request/Response)
-│    │       ├──  TCP_CRR (Connect/Request/Response)
-│    │       ├──  One-Way Latency (ms) [RFC1242] 
-│    │       ├──  RTT (ms) [RFC2544]
-│    │       ├──  Throughput (Mbps or Gbps) [RFC2544]
-│    │       ├──  Packet loss rate (%)  [RFC2544] 
-│    │       ├──  Jitter [RFC5481]
-│    │       ├──  Packet size variability [RFC2544]
-│    │       ├──  Concurrent flow handling  [RFC2285]
-│    │       └──  Flow setup rate (flows per second)  [RFC8172]
-│    └──  System Resource Performance Metrics
-│            │ 	
-│            ├──  CPU/GPU Utilization  [RFC8172]
-│            └──  Memory Utilization (MB/GB) [RFC8172]
-├── Extended Performance Metrics (Optional)
-│            │ 	
-│            ├──  Policy Enforcement Delay (ms)
-│            ├──  Telemetry Overhead
-│            └──  Power and Energy Consumption (J per bit)
-└──  Extended Quality of Experience for DevOps and Developers (Optional)
-             │ 	
-             ├──  Deployment time
-             ├──  Configuration simplicity
-             └──  Troubleshooting tooling
 
-]]>
-</artwork>
-
-</artset>
-</figure>
      
 <section anchor="CNI-Performance">
 <name>Core Performance Metrics for CNI Benchmarking </name>
@@ -466,7 +420,7 @@ While existing works such as <xref target="RFC8172"/>  and <xref target="ietf-bm
 <t>
 Federated and multi-cluster environments extend the scope of container networking beyond single operational domains. These architectures enable scalability, geographical distribution, isolation, and service proximity to end users, which are key properties for multi-domain cloud-native infrastructures. Federated CNI benchmarking is particularly relevant to Telco-Cloud and 6G scenarios, where workloads are distributed between cloud and (far-)edge IoT domains, introducing additional considerations compared to single-cluster deployments.
 
-In such environments, multiple clusters operate as autonomous domains while being interconnected through federation layers or multi-cluster networking mechanisms. Examples include popular third-party solutions such as Submariner, Liqo, Karmada, and Open Cluster Management (OCM), which provide network connectivity, service discovery, and workload scheduling across clusters. In this context, CNIs are often extended by multi-cluster gateways or overlays to facilitate inter-cluster pod-to-pod and service-to-service communication. Such interconnections can rely on encapsulation protocols (e.g., VXLAN, IPSec, WireGuard) or Layer-7 service meshes (e.g., Istio, Linkerd, Consul, Open Service Mesh) – based on Envoy proxy and sidecars.
+In such environments, multiple clusters operate as autonomous domains while being interconnected through federation layers or multi-cluster networking mechanisms. Examples include popular third-party solutions such as Submariner, Liqo, Karmada, and Open Cluster Management (OCM), which provide network connectivity, service discovery, and workload scheduling across clusters. In this context, CNIs are often extended by multi-cluster gateways or overlays to facilitate inter-cluster pod-to-pod and service-to-service communication. Such interconnections can rely on encapsulation protocols (e.g., VXLAN, IPSec, WireGuard) or Layer-7 service meshes (e.g., Istio, Linkerd, Consul, Open Service Mesh) - based on Envoy proxy and sidecars.
 </t>  
 </section>
 <section anchor="bench_federated">
@@ -479,8 +433,8 @@ In such environments, multiple clusters operate as autonomous domains while bein
 <li>Overlay, Encapsulation, and Encryption Mechanisms: CNIs may rely on native multi-cluster extensions (e.g., Cilium ClusterMesh) or external overlays (e.g., Submariner tunnels) with optional encryption (e.g., IPSec, WireGuard). Tests SHOULD measure the combined encapsulation and cryptographic overhead, including per-packet header size, MTU effects, CPU utilization, and throughput reduction compared to unencrypted baselines.</li>
 <li>Routing, Policy, and Synchronization Behavior: CNIs synchronize endpoints, routes, and network policies across clusters. Benchmarking SHOULD measure propagation delay, convergence time, and consistency under dynamic conditions such as node joins, removals, or policy updates. Resource utilization (CPU, memory, and bandwidth) during synchronization SHOULD also be recorded.</li>
 <li>Cross-Cluster Connectivity and Load Balancing: Evaluation SHOULD include one-way and RTT latency, throughput, and packet loss between pods located in different clusters. When multi-cluster services distribute requests, benchmarks SHOULD assess fairness as well as responsiveness to endpoint or cluster failures that influence path selection and recovery behavior.</li>
-<li>Quality of Service (QoS) and Policy Enforcement: CNIs that implement QoS tagging or traffic shaping (e.g., Cilium’s eBPF/EDT-based pacing, Calico’s DSCP marking and policy-driven shaping, Antrea’s TrafficControl, or Kube-OVN’s QoS queues) SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays. Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules) remain consistent across domains.</li>
-<li>Resiliency and Recovery Performance: Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions, including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration. Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state. Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption duration to characterize the CNI’s overall fault-tolerance behavior.</li>
+<li>Quality of Service (QoS) and Policy Enforcement: CNIs that implement QoS tagging or traffic shaping (e.g., Cilium's eBPF/EDT-based pacing, Calico's DSCP marking and policy-driven shaping, Antrea's TrafficControl, or Kube-OVN's QoS queues) SHOULD be evaluated for their ability to maintain SLA/SLO across clusters and overlays. Benchmarks SHOULD also verify that isolation and access-control policies (e.g., deny/allow rules) remain consistent across domains.</li>
+<li>Resiliency and Recovery Performance: Benchmarking SHOULD assess CNI behavior during multi-cluster fault conditions, including inter-cluster link loss, control-plane failures, restarts, or topology reconfiguration. Measurements SHOULD include reconvergence time, packet loss, and recovery time to steady-state. Benchmarks SHOULD also evaluate route re-establishment latency and transient traffic interruption duration to characterize the CNI's overall fault-tolerance behavior.</li>
 </ul>
 
 
@@ -490,7 +444,7 @@ In such environments, multiple clusters operate as autonomous domains while bein
 <section anchor="CODEF">
 <name>Best Practice Operational Example: CODEF</name>
 <t>
-CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor, as represented in Figure 2. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
+CODEF is an open-source, modular benchmarking environment that supports the evaluation of containerized workloads in edge-to-cloud infrastructures. CODEF adopts a microservice-based architecture to streamline experimentation through abstraction, automation, and reproducibility. CODEF is logically divided into four functional layers, each implemented as an independent containerized microservice: Infrastructure Manager, Resource Manager, Experiment Controller, and Results' Processor, as represented in Figure 1. This modular design ensures extensibility and facilitates integration with diverse technologies across the experimentation pipeline. </t>
 
 
   <figure>
@@ -746,9 +700,6 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.6815.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.5481.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9315.xml"/>
-  
-  
-  
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4364.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.8204.xml"/> 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7024.xml"/>
@@ -756,13 +707,6 @@ Benchmarking tools and automation frameworks may introduce risk vectors such as 
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.9181.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.7426.xml"/>
         <xi:include href="https://bib.ietf.org/public/rfc/bibxml/reference.RFC.4271.xml"/>
-  
-  
-  
-  
-  
- 
-  
         <!-- The recommended and simplest way to include a well known reference -->
         
       </references>
